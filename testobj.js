@@ -112,11 +112,8 @@ function loadDreamAnimal(animalPath) {
   THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
   loader.load(path, function(g) {
-    // addAnimal(g);
-    // buildAnimal(g);
     initAnimal(g);
   }, onProgress, onError);
-  console.log('hi');
 }
 
 var buildingAnimal = false;
@@ -142,9 +139,6 @@ function initAnimal(g) {
   for (var i = 0; i < g.faces.length - 1; i++) {
     g.faces[ i ].materialIndex = i; // materialB
   }
-
-  // obj.material.side = THREE.DoubleSide;
-  // obj.material.color.setRGB(1, 1, 1);
   obj.geometry.computeFaceNormals();
   obj.geometry.computeVertexNormals();
   obj.geometry.buffersNeedUpdate = true;
@@ -155,6 +149,8 @@ function initAnimal(g) {
 }
 
 function showNextFace() {
+  var scaleSize = map_range(facePos, 0.2, allFaces.length-1, 0.0, 1.0);
+  obj.scale.set(1.0, scaleSize, scaleSize);
   obj.material.materials[facePos] = materials[0];
   if (facePos >= allFaces.length -1) {
     buildingAnimal = false;
@@ -162,45 +158,6 @@ function showNextFace() {
     facePos++;
   }
 }
-
-// function growAnimal() {
-//   for (var i = 0; i < obj.geometry.vertices; i++) {
-//     var v = obj.geometry.vertices[i];
-//     v.x *= facePos;
-//     v.y *= facePos;
-//     v.z *= facePos;
-//   }
-//   facePos ++;
-// }
-
-// function addAnimalFaces() {
-//   // make next face visible
-//   obj.geometry.faces[ facePos ].materialIndex = 1;
-//   // if (facePos >= allFaces.length -1) {
-//   //   buildingAnimal = false;
-//   // } else {
-//   //   facePos++;
-//   // }
-
-//   // var g = obj.geometry;
-//   // g.faces.push(allFaces[facePos]);
-//   // obj = new THREE.Mesh(g);
-//   // obj.material.map = texture;
-//   // obj.material.side = THREE.DoubleSide;
-//   // obj.material.color.setRGB(1, 1, 1);
-//   obj.geometry.computeFaceNormals();
-//   obj.geometry.computeVertexNormals();
-//   obj.geometry.buffersNeedUpdate = true;
-//   obj.geometry.uvsNeedUpdate = true;
-//   obj.geometry.elementsNeedUpdate = true;
-//   obj.geometry.castShadow = true;
-//   // scene.add(obj);
-//   if (facePos >= allFaces.length -1) {
-//     buildingAnimal = false;
-//   } else {
-//     facePos++;
-//   }
-// }
 
 function clearAnimal() {
   if (typeof(obj) !== 'undefined') {
@@ -234,9 +191,9 @@ function loadMyObj(animalPath, m) {
       object.position.x = -60;
       object.rotation.x = 20*Math.PI / 180;
       object.rotation.z = 20*Math.PI / 180;
-      object.scale.x = 30;
-      object.scale.y = 30;
-      object.scale.z = 30;
+      object.scale.x = 40;
+      object.scale.y = 40;
+      object.scale.z = 40;
       obj = object;
 
       scene.add(obj);
@@ -254,42 +211,8 @@ var onError = function ( xhr ) {
   console.log(xhr);
 };
 
-
-//// UNUSED
-function addAnimal(g) {
-  obj = new THREE.Mesh(g);
-  obj.material.map = texture;
-  obj.material.side = THREE.DoubleSide;
-  g.computeFaceNormals();
-  g.computeVertexNormals();
-  g.buffersNeedUpdate = true;
-  g.uvsNeedUpdate = true;
-  g.elementsNeedUpdate = true;
-  g.castShadow = true;
-  obj.material.color.setRGB(1, 1, 1);
-  scene.add(obj);
-}
-
-function buildAnimal(g) {
-  var allFaces = g.faces;
-  g.faces = [];
-  for (var i = 0; i < allFaces.length; i++) {
-    g.faces.push(allFaces[i]);
-    if (typeof(obj) !== 'undefined') {
-      scene.remove(obj);
-    }
-    obj = new THREE.Mesh(g);
-    obj.material.map = texture;
-    obj.material.side = THREE.DoubleSide;
-    g.computeFaceNormals();
-    g.computeVertexNormals();
-    g.buffersNeedUpdate = true;
-    g.uvsNeedUpdate = true;
-    g.elementsNeedUpdate = true;
-    g.castShadow = true;
-    obj.material.color.setRGB(1, 1, 1);
-    scene.add(obj);
-  }
+function map_range(value, low1, high1, low2, high2) {
+    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
 
 // research: http://www.infoplease.com/cig/biology/protein-synthesis.html
