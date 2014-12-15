@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <script src="http://threejs.org/build/three.js"></script>
+    <script src="http://threejs.org/examples/js/loaders/DDSLoader.js"></script>
+    <!-- <script src="http://threejs.org/examples/js/loaders/AssimpJSONLoader.js"></script> -->
+
+    <!-- <script src="http://threejs.org/examples/js/loaders/OBJLoader.js"></script> -->
+    <!-- <script src="http://threejs.org/examples/js/loaders/PLYLoader.js"></script> -->
+
+    <script src="http://threejs.org/examples/js/Detector.js"></script>
+
+    <!-- <script src="testply.js"></script> -->
+    <script src="testobj.js"></script>
+
+
+    <script id="cubeVertexShader" type="x-shader/x-vertex">
+        uniform float time;
+        varying vec2 vUv;
+     
+        void main() {
+            vUv = uv;
+            vec3 newPosition = position + normal * vec3(sin(time * 0.2) * 3.0);
+            gl_Position = projectionMatrix <i> modelViewMatrix </i> vec4(newPosition, 1.0);
+        }
+    </script>
+
+  </head>
+</html>
